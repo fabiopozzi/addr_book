@@ -3,39 +3,53 @@
 
 struct list_t
 {
-    lista *next;
     int idx;
     char *nome;
     char *cognome;
-} lista;
+    struct list_t *next;
+};
 
-lista *b1 = NULL;
+struct list_t *b1 = NULL;
 int i=0;
 
-int add_to_book(lista *book)
+int add_to_book(struct list_t **book)
 {
-    lista *tmp;
-    if (book == NULL) {
-        tmp = (lista *)malloc(sizeof(lista));
-        if (tmp == NULL) {
-            printf("[error] Malloc failed\n"); // TODO: rimpiazzare con fprintf(stderr) ?
-            return -1;                         // TODO: usare valori di ritorno codificati ?
-        }
-        book = tmp;
+    struct list_t *tmp;
+
+    tmp = (struct list_t *)malloc(sizeof(struct list_t));
+    if (tmp == NULL) {
+        printf("[error] Malloc failed\n"); // TODO: rimpiazzare con fprintf(stderr) ?
+        return -1;                         // TODO: usare valori di ritorno codificati ?
     }
-    else {
-        // inserimento in testa
-        tmp->next = book;
-        tmp->idx = i;
-        book = tmp;
-        i++;
+
+    // inserimento in testa
+    tmp->next = *book;
+    tmp->idx = i;
+    *book = tmp;
+    printf("aggiunto elemento %d\n",i);
+    i++;
+
+    return 0;
+}
+
+int print_book(struct list_t *book)
+{
+    struct list_t *tmp = book;
+    struct list_t *el;
+
+    while (tmp != NULL)
+    {
+        printf("elemento lista numero %d\n", tmp->idx);
+        el = tmp;
+        tmp = tmp->next;
+        free(el);
     }
     return 0;
 }
 
 int main(int argc, char *argv[])
 {
-    char c;
+    char c,foo;
     int go = 1;
     // TODO: usare getopt?
     printf("cosa fare?\n");
@@ -43,11 +57,12 @@ int main(int argc, char *argv[])
     printf("e per uscire\n");
     while (go) {
         printf("> ");
-        c = getch();
+        scanf("%c%c", &c, &foo);
         switch (c)
         {
             case 'a':
-                add_to_book(b1);
+                add_to_book(&b1);
+                printf("ora b1 vale %p\n", b1);
                 break;
             case 'e':
                 go = 0;
