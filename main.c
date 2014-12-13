@@ -1,47 +1,68 @@
 #include<stdio.h>
-#include<ncurses.h>
 #include<stdlib.h>
-#include<signal.h>
-#include<string.h>
 
-//void draw_menu(void);
-//static void finish(int sig);
-
-int main(int argc, char **argv)
+struct list_t
 {
-    int rows,cols;      // number of rows and columns of the current window
-    char msg[] = "FP address manager";
+    lista *next;
+    int idx;
+    char *nome;
+    char *cognome;
+} lista;
 
-	initscr();		// init the curses library
-	raw();			// line buffering disabled
-	keypad(stdscr, TRUE);	// enables function keys reading
-	noecho();
-    getmaxyx(stdscr, rows, cols);
+lista *b1 = NULL;
+int i=0;
 
-	mvprintw(0, (cols-strlen(msg))/2 , msg);
-    {
-        int ch;
-
-        ch = getch();
-
-        if (ch == KEY_F(1)) {
-            mvprintw(2, (cols-strlen(msg))/2, "You pressed the F1 key");
+int add_to_book(lista *book)
+{
+    lista *tmp;
+    if (book == NULL) {
+        tmp = (lista *)malloc(sizeof(lista));
+        if (tmp == NULL) {
+            printf("[error] Malloc failed\n"); // TODO: rimpiazzare con fprintf(stderr) ?
+            return -1;                         // TODO: usare valori di ritorno codificati ?
         }
-        else {
-            mvprintw(2, (cols-strlen(msg))/2, "You pressed ");
-            attron(A_BOLD);
-            printw("%c", ch);
-            attroff(A_BOLD);
+        book = tmp;
+    }
+    else {
+        // inserimento in testa
+        tmp->next = book;
+        tmp->idx = i;
+        book = tmp;
+        i++;
+    }
+    return 0;
+}
+
+int main(int argc, char *argv[])
+{
+    char c;
+    int go = 1;
+    // TODO: usare getopt?
+    printf("cosa fare?\n");
+    printf("a per aggiungere un record\n");
+    printf("e per uscire\n");
+    while (go) {
+        printf("> ");
+        c = getch();
+        switch (c)
+        {
+            case 'a':
+                add_to_book(b1);
+                break;
+            case 'e':
+                go = 0;
+                break;
+            default:
+                printf("opzione non riconosciuta\n");
+                break;
         }
     }
-
-	refresh();
-	getch();
-	endwin();
-
-	// do your ncurses wrapup here
-
-	exit(0);
+    printf("hai deciso di uscire, stampo il libro attuale\n");
+    print_book(b1);
+    
+    return 0;
 }
+
+
 
 
