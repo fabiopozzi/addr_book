@@ -22,7 +22,7 @@ int add_to_book(struct list_t **book)
 
     tmp = (struct list_t *)malloc(sizeof(struct list_t));
     if (tmp == NULL) {
-        printf("[error] Malloc failed\n"); // TODO: rimpiazzare con fprintf(stderr) ?
+        fprintf(stderr, "[error] Malloc failed\n");
         return -1;                         // TODO: usare valori di ritorno codificati ?
     }
 
@@ -30,8 +30,10 @@ int add_to_book(struct list_t **book)
     tmp->next = *book;
     tmp->idx = i;
     tmp->nome = (char *)malloc(STR_MAX_LEN * sizeof(char));
-    if(tmp->nome == NULL)
+    if(tmp->nome == NULL) {
+        fprintf(stderr, "[error] Malloc failed\n");
         return -1;
+    }
     printf("Inserisci nome, (max 20 caratteri)\n");
     if (fgets(line, sizeof(line), stdin) != NULL) {
         sscanf(line,"%[^\n]", tmp->nome);
@@ -91,7 +93,7 @@ int main(int argc, char *argv[])
     }
     printf("hai deciso di uscire, stampo il libro attuale\n");
     print_book(b1);
-    
+
     return 0;
 }
 
