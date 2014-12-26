@@ -48,17 +48,15 @@ int add_to_book(struct list_t **book)
 
 int print_book(struct list_t *book)
 {
-    struct list_t *tmp = book;
-    struct list_t *el;
+    struct list_t *lp, *oldlp;
 
-    while (tmp != NULL)
+    for(lp = book; lp != NULL; oldlp = lp, lp = lp->next, free(oldlp))
     {
-        printf("elemento lista numero %d\n", tmp->idx);
-        if (tmp->nome != NULL)
-            printf("Nome: %s\n",tmp->nome);
-        el = tmp;
-        tmp = tmp->next;
-        free(el);
+        printf("elemento lista numero %d\n", lp->idx);
+        if (lp->nome != NULL) {
+            printf("Nome: %s\n",lp->nome);
+            free(lp->nome);
+        }
     }
     return 0;
 }
