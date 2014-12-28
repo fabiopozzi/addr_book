@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "ab_curses.h"
 
 #define STR_MAX_LEN 20
 
@@ -65,10 +66,14 @@ int print_book(struct list_t *book)
 
 int main(int argc, char *argv[])
 {
-    char c,foo;
-    int go = 1;
-    int ret;
+    /*char c,foo;*/
+    /*int go = 1;*/
+    /*int ret;*/
+
+    curs_main();
+    print_choice();
     // TODO: usare getopt?
+ #if 0
     printf("cosa fare?\n");
     printf("a per aggiungere un record\n");
     printf("e per uscire\n");
@@ -93,6 +98,7 @@ int main(int argc, char *argv[])
     }
     printf("hai deciso di uscire, stampo il libro attuale\n");
     print_book(b1);
+#endif
 
     return 0;
 }
