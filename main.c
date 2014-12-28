@@ -72,6 +72,7 @@ int main(int argc, char *argv[])
 
     curs_main();
     print_choice();
+    curs_exit();
     // TODO: usare getopt?
  #if 0
     printf("cosa fare?\n");

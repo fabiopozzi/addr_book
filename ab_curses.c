@@ -21,7 +21,8 @@ void print_choice(void)
     mvprintw(4, 10, "Welcome to the Address Book");
     mvprintw(6, 10, "Press 'a' if you want to add a record");
     mvprintw(8, 10, "Press 'p' to print the current address book");
-    mvprintw(10, 10, "Press F1 to exit");
+    mvprintw(10, 10, "Press 'm' to print the menu");
+    mvprintw(12, 10, "Press F1 to exit");
     /* Loop through to get user requests */
     /* F1 to exit */
     while((ch = getch()) != KEY_F(1))
@@ -38,6 +39,14 @@ void print_choice(void)
             refresh();
             mvprintw(4, 10, "Print all records");
             break;
+        case 'm':
+            clear();
+            refresh();
+            mvprintw(4, 10, "Welcome to the Address Book");
+            mvprintw(6, 10, "Press 'a' if you want to add a record");
+            mvprintw(8, 10, "Press 'p' to print the current address book");
+            mvprintw(10, 10, "Press 'm' to print the menu");
+            mvprintw(12, 10, "Press F1 to exit");
         default:
             /* if it's a normal char, it gets printed */
             /*form_driver(my_form, ch);*/
@@ -46,17 +55,20 @@ void print_choice(void)
     }
 }
 
+void curs_exit(void)
+{
+    endwin();
+}
 
-int print_menu(void)
+int add_record(void)
 {
     FIELD *field[4];
     FORM    *my_form;
     int ch;
     /* Init fields */
-    field[0] = new_field(1, 10, 4, 18, 0, 0);
-    field[1] = new_field(1, 10, 6, 18, 0, 0);
-    field[2] = new_field(1, 10, 8, 18, 0, 0);
-    field[3] = NULL;
+    field[0] = new_field(1, 10, 6, 18, 0, 0);
+    field[1] = new_field(1, 10, 8, 18, 0, 0);
+    field[2] = NULL;
 
     set_field_back(field[0], A_UNDERLINE);
     field_opts_off(field[0], O_AUTOSKIP);
@@ -64,22 +76,18 @@ int print_menu(void)
     set_field_back(field[1], A_UNDERLINE);
     field_opts_off(field[1], O_AUTOSKIP);
 
-    set_field_back(field[2], A_UNDERLINE);
-    field_opts_off(field[2], O_AUTOSKIP);
-
     /* Create the form and post it */
     my_form = new_form(field);
     post_form(my_form);
     refresh();
 
-    mvprintw(4, 10, "Value1: ");
-    mvprintw(6, 10, "Value2: ");
-    mvprintw(8, 10, "Value3: ");
+    mvprintw(6, 10, "Nome: ");
+    mvprintw(8, 10, "Cognome: ");
     refresh();
 
     /* Loop through to get user requests */
     /* F1 to exit */
-    while((ch = getch()) != KEY_F(1))
+    while((ch = getch()) != KEY_F(10))
     {
         switch(ch)
         {
@@ -95,6 +103,8 @@ int print_menu(void)
             form_driver(my_form, REQ_PREV_FIELD);
             form_driver(my_form, REQ_END_LINE);
             break;
+        case KEY_F(10):
+            mvprintw(10, 10, "Saving...");
         default:
             /* if it's a normal char, it gets printed */
             form_driver(my_form, ch);
@@ -108,7 +118,6 @@ int print_menu(void)
     free_field(field[0]);
     free_field(field[1]);
 
-    endwin();
     return 0;
 }
 
