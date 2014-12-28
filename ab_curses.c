@@ -5,6 +5,8 @@
 #include<string.h>
 #include <form.h>
 
+
+void add_record(void);
 void curs_main(void)
 {
     /* Init curses */
@@ -33,6 +35,7 @@ void print_choice(void)
             clear();
             refresh();
             mvprintw(4, 10, "Add a new record");
+            add_record();
             break;
         case 'p':
             clear();
@@ -60,7 +63,7 @@ void curs_exit(void)
     endwin();
 }
 
-int add_record(void)
+void add_record(void)
 {
     FIELD *field[4];
     FORM    *my_form;
@@ -117,7 +120,5 @@ int add_record(void)
     free_form(my_form);
     free_field(field[0]);
     free_field(field[1]);
-
-    return 0;
 }
 
