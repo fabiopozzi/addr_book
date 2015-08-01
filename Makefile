@@ -1,4 +1,4 @@
-CFLAGS=-c -Wall -Werror -pedantic -std=c99
+CFLAGS=-c -Wall -Werror -pedantic -std=gnu99
 
 all: addr_book
 
