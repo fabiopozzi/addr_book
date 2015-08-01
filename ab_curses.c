@@ -1,8 +1,9 @@
-#include<stdio.h>
-#include<ncurses.h>
-#include<stdlib.h>
-#include<signal.h>
-#include<string.h>
+#include <stdio.h>
+#include <ncurses.h>
+#include <stdlib.h>
+#include <signal.h>
+#include <string.h>
+#include <unistd.h>
 #include <form.h>
 
 
@@ -18,19 +19,20 @@ void curs_main(void)
 
 void print_choice(void)
 {
-	int ch;
+	int ch = 0;
 
-	mvprintw(4, 10, "Welcome to the Address Book");
-	mvprintw(6, 10, "Press 'a' if you want to add a record");
-	mvprintw(8, 10, "Press 'p' to print the current address book");
-	mvprintw(10, 10, "Press 'm' to print the menu");
-	mvprintw(12, 10, "Press F1 to exit");
 	/* Loop through to get user requests */
 	/* F1 to exit */
-	while((ch = getch()) != KEY_F(1))
-	{
-		switch(ch)
-		{
+	while(ch != KEY_F(1)) {
+
+		mvprintw(4, 10, "Welcome to the Address Book");
+		mvprintw(6, 10, "Press 'a' if you want to add a record");
+		mvprintw(8, 10, "Press 'p' to print the current address book");
+		mvprintw(10, 10, "Press 'm' to print the menu");
+		mvprintw(12, 10, "Press F1 to exit");
+		ch = getch();
+
+		switch(ch) {
 		case 'a':
 			clear();
 			refresh();
@@ -42,20 +44,16 @@ void print_choice(void)
 			refresh();
 			mvprintw(4, 10, "Print all records");
 			break;
-		case 'm':
-			clear();
-			refresh();
-			mvprintw(4, 10, "Welcome to the Address Book");
-			mvprintw(6, 10, "Press 'a' if you want to add a record");
-			mvprintw(8, 10, "Press 'p' to print the current address book");
-			mvprintw(10, 10, "Press 'm' to print the menu");
-			mvprintw(12, 10, "Press F1 to exit");
 		default:
 			/* if it's a normal char, it gets printed */
 			/*form_driver(my_form, ch);*/
 			break;
 		}
 	}
+	clear();
+	mvprintw(4, 10, "Exit");
+	refresh();
+
 }
 
 void curs_exit(void)
@@ -106,14 +104,16 @@ void add_record(void)
 			form_driver(my_form, REQ_PREV_FIELD);
 			form_driver(my_form, REQ_END_LINE);
 			break;
-		case KEY_F(10):
-			mvprintw(10, 10, "Saving...");
 		default:
 			/* if it's a normal char, it gets printed */
 			form_driver(my_form, ch);
 			break;
 		}
 	}
+	mvprintw(10, 10, "Saving...");
+	refresh();
+	usleep(500000);
+	// TODO: save record to file
 
 	/* Un-post form and free memory */
 	unpost_form(my_form);
